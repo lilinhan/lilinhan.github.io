@@ -99,12 +99,12 @@
 <p>C语言字符串必须符合某种编码(ASCII编码)，并且除了字符串的末尾之外，字符串里面不能包含空字符，否则空字符会被误认为是字符串的末尾。但是SDS可以，所以SDS还可以保存像图片、音频、视频、压缩文件这样的二进制数据。(buf为字节数组，通过这样的方式来实现)</p>
 </blockquote>
 <h3 id="兼容部分C字符串函数"><a href="#兼容部分C字符串函数" class="headerlink" title="兼容部分C字符串函数"></a>兼容部分C字符串函数</h3><p>虽然SDS的API都是二进制安全的，但它们一样遵循C字符串以空字符结尾的惯例。虽然这个字符不占大小，但是在分配的时候，SDS会默认分配len+1大小的空间。</p>
-<h2 id="SDS-API"><a href="#SDS-API" class="headerlink" title="SDS API"></a>SDS API</h2><p><img src="./api.png" alt="Alt text"></p>
+<h2 id="SDS-API"><a href="#SDS-API" class="headerlink" title="SDS API"></a>SDS API</h2><p>SDS相关的API可以参考这里:<br><a href="http://www.kancloud.cn/kancloud/redisbook/63830" target="_blank" rel="external">SDS API</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/06/15/Redis设计与实现-动态字符串/" data-id="cipg7sk1m000100x4cxyecsx8" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/06/15/Redis设计与实现-动态字符串/" data-id="cipg88yku000039x4fucmmhtq" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis-NoSQL-DataBase/">Redis NoSQL DataBase</a></li></ul>
@@ -146,7 +146,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/06/13/hello-world/" data-id="cipg7sk1i000000x4uyl09kyo" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/06/13/hello-world/" data-id="cipg88ykz000139x4e7yfdgsc" class="article-share-link">Share</a>
       
       
     </footer>

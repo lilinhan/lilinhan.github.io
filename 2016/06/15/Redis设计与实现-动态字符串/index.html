@@ -15,14 +15,12 @@ Redis没有直接使用C语言中的传统字符串，而是自己构建了一�
 <meta property="og:description" content="@(学习笔记)[数据库, NoSQL, 数据结构]
 【Redis 设计与实现】第二章 动态字符串
 Redis没有直接使用C语言中的传统字符串，而是自己构建了一个简单的动态字符串(Simple dynamic string， SDS)的抽象类型。Redis使用C语言的字符串只是当该字符串为字符串常量的时候使用，一般都是直接构造SDS的对象来使用。另：AOF模块中，Redis还会使用SDS作为缓冲区来">
-<meta property="og:image" content="http://yoursite.com/./api.png">
-<meta property="og:updated_time" content="2016-06-15T01:44:15.000Z">
+<meta property="og:updated_time" content="2016-06-15T01:56:58.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redis设计与实现 动态字符串">
 <meta name="twitter:description" content="@(学习笔记)[数据库, NoSQL, 数据结构]
 【Redis 设计与实现】第二章 动态字符串
 Redis没有直接使用C语言中的传统字符串，而是自己构建了一个简单的动态字符串(Simple dynamic string， SDS)的抽象类型。Redis使用C语言的字符串只是当该字符串为字符串常量的时候使用，一般都是直接构造SDS的对象来使用。另：AOF模块中，Redis还会使用SDS作为缓冲区来">
-<meta name="twitter:image" content="http://yoursite.com/./api.png">
   
     <link rel="alternative" href="/atom.xml" title="Talk is cheap   Show me the code" type="application/atom+xml">
   
@@ -108,12 +106,12 @@ Redis没有直接使用C语言中的传统字符串，而是自己构建了一�
 <p>C语言字符串必须符合某种编码(ASCII编码)，并且除了字符串的末尾之外，字符串里面不能包含空字符，否则空字符会被误认为是字符串的末尾。但是SDS可以，所以SDS还可以保存像图片、音频、视频、压缩文件这样的二进制数据。(buf为字节数组，通过这样的方式来实现)</p>
 </blockquote>
 <h3 id="兼容部分C字符串函数"><a href="#兼容部分C字符串函数" class="headerlink" title="兼容部分C字符串函数"></a>兼容部分C字符串函数</h3><p>虽然SDS的API都是二进制安全的，但它们一样遵循C字符串以空字符结尾的惯例。虽然这个字符不占大小，但是在分配的时候，SDS会默认分配len+1大小的空间。</p>
-<h2 id="SDS-API"><a href="#SDS-API" class="headerlink" title="SDS API"></a>SDS API</h2><p><img src="./api.png" alt="Alt text"></p>
+<h2 id="SDS-API"><a href="#SDS-API" class="headerlink" title="SDS API"></a>SDS API</h2><p>SDS相关的API可以参考这里:<br><a href="http://www.kancloud.cn/kancloud/redisbook/63830" target="_blank" rel="external">SDS API</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/06/15/Redis设计与实现-动态字符串/" data-id="cipg7sk1m000100x4cxyecsx8" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/06/15/Redis设计与实现-动态字符串/" data-id="cipg88yku000039x4fucmmhtq" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis-NoSQL-DataBase/">Redis NoSQL DataBase</a></li></ul>

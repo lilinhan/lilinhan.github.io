@@ -3,17 +3,29 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Talk is cheap   Show me the code</title>
+  <title>Redis设计与实现 动态字符串 | Talk is cheap   Show me the code</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Member of Xiyou Linux Group &amp; Summer Intern of Tencent">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Talk is cheap   Show me the code">
-<meta property="og:url" content="http://yoursite.com/index.html">
+  <meta name="description" content="@(学习笔记)[数据库, NoSQL, 数据结构]
+【Redis 设计与实现】第二章 动态字符串[TOC]
+
+Redis没有直接使用C语言中的传统字符串，而是自己构建了一个简单的动态字符串(Simple dynamic string， SDS)的抽象类型。Redis使用C语言的字符串只是当该字符串为字符串常量的时候使用，一般都是直接构造SDS的对象来使用。另：AOF模块中，Redis还会使用SDS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis设计与实现 动态字符串">
+<meta property="og:url" content="http://yoursite.com/2016/06/15/Redis设计与实现-动态字符串/index.html">
 <meta property="og:site_name" content="Talk is cheap   Show me the code">
-<meta property="og:description" content="Member of Xiyou Linux Group &amp; Summer Intern of Tencent">
+<meta property="og:description" content="@(学习笔记)[数据库, NoSQL, 数据结构]
+【Redis 设计与实现】第二章 动态字符串[TOC]
+
+Redis没有直接使用C语言中的传统字符串，而是自己构建了一个简单的动态字符串(Simple dynamic string， SDS)的抽象类型。Redis使用C语言的字符串只是当该字符串为字符串常量的时候使用，一般都是直接构造SDS的对象来使用。另：AOF模块中，Redis还会使用SDS">
+<meta property="og:image" content="http://yoursite.com/./api.png">
+<meta property="og:updated_time" content="2016-06-15T01:40:30.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Talk is cheap   Show me the code">
-<meta name="twitter:description" content="Member of Xiyou Linux Group &amp; Summer Intern of Tencent">
+<meta name="twitter:title" content="Redis设计与实现 动态字符串">
+<meta name="twitter:description" content="@(学习笔记)[数据库, NoSQL, 数据结构]
+【Redis 设计与实现】第二章 动态字符串[TOC]
+
+Redis没有直接使用C语言中的传统字符串，而是自己构建了一个简单的动态字符串(Simple dynamic string， SDS)的抽象类型。Redis使用C语言的字符串只是当该字符串为字符串常量的时候使用，一般都是直接构造SDS的对象来使用。另：AOF模块中，Redis还会使用SDS">
+<meta name="twitter:image" content="http://yoursite.com/./api.png">
   
     <link rel="alternative" href="/atom.xml" title="Talk is cheap   Show me the code" type="application/atom+xml">
   
@@ -52,15 +64,15 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-Redis设计与实现-动态字符串" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-Redis设计与实现-动态字符串" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     
       <header class="article-header">
         
   
-    <a class="article-title" href="/2016/06/15/Redis设计与实现-动态字符串/">Redis设计与实现 动态字符串</a>
+    <h1 class="article-title" itemprop="name">
+      Redis设计与实现 动态字符串
+    </h1>
   
 
       </header>
@@ -114,51 +126,20 @@
     </footer>
   </div>
   
-</article>
-
-
-  
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
     
-      <header class="article-header">
-        
+<nav id="article-nav">
   
-    <a class="article-title" href="/2016/06/13/hello-world/">Hello World</a>
   
+    <a href="/2016/06/13/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Hello World</div>
+    </a>
+  
+</nav>
 
-      </header>
-    
-    <time class="article-date" datetime="2016-06-13T10:35:21.000Z" itemprop="datePublished">06-13-2016</time>
-    
-  </div>
-  <div class="article-inner">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/06/13/hello-world/" data-id="cipg7ofcw0000xdx47yhmorbx" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
   
 </article>
 
-
-  
-  
 </section>
         
       </div>

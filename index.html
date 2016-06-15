@@ -76,15 +76,13 @@
 <p>Redis没有直接使用C语言中的传统字符串，而是自己构建了一个简单的动态字符串(Simple dynamic string， SDS)的抽象类型。Redis使用C语言的字符串只是当该字符串为字符串常量的时候使用，一般都是直接构造SDS的对象来使用。另：AOF模块中，Redis还会使用SDS作为缓冲区来用。</p>
 </blockquote>
 <p>我们接下来详细说说这个SDS。</p>
-<p>##SDS的定义<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">char</span> *sds;</span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> sdshdr &#123;</span><br><span class="line">        <span class="comment">// buf 已占用长度</span></span><br><span class="line">        <span class="keyword">int</span> len;</span><br><span class="line">        <span class="comment">// buf 剩余可用长度</span></span><br><span class="line">        <span class="keyword">int</span> <span class="built_in">free</span>;</span><br><span class="line">        <span class="comment">// 实际保存字符串数据的地方</span></span><br><span class="line">        <span class="keyword">char</span> buf[];</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">Example: <span class="string">"hello world"</span> 字符串在Redis中保存的状态</span><br><span class="line"><span class="keyword">struct</span> sdshdr &#123;</span><br><span class="line">        len = <span class="number">11</span>;</span><br><span class="line">        <span class="built_in">free</span> = <span class="number">0</span>;</span><br><span class="line">        buf = <span class="string">"hello world\0"</span>;  <span class="comment">// buf 的实际长度为 len + 1</span></span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<h2 id="SDS的定义"><a href="#SDS的定义" class="headerlink" title="SDS的定义"></a>SDS的定义</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">char</span> *sds;</span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> sdshdr &#123;</span><br><span class="line">        <span class="comment">// buf 已占用长度</span></span><br><span class="line">        <span class="keyword">int</span> len;</span><br><span class="line">        <span class="comment">// buf 剩余可用长度</span></span><br><span class="line">        <span class="keyword">int</span> <span class="built_in">free</span>;</span><br><span class="line">        <span class="comment">// 实际保存字符串数据的地方</span></span><br><span class="line">        <span class="keyword">char</span> buf[];</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">Example: <span class="string">"hello world"</span> 字符串在Redis中保存的状态</span><br><span class="line"><span class="keyword">struct</span> sdshdr &#123;</span><br><span class="line">        len = <span class="number">11</span>;</span><br><span class="line">        <span class="built_in">free</span> = <span class="number">0</span>;</span><br><span class="line">        buf = <span class="string">"hello world\0"</span>;  <span class="comment">// buf 的实际长度为 len + 1</span></span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <p><strong>注意</strong> ： len的大小不包括最后’\0’字符。</p>
-<p>##SDS与C字符串的区别</p>
-<p>###SDS和C字符串的比较</p>
-<ul>
+<h2 id="SDS与C字符串的区别"><a href="#SDS与C字符串的区别" class="headerlink" title="SDS与C字符串的区别"></a>SDS与C字符串的区别</h2><h3 id="SDS和C字符串的比较"><a href="#SDS和C字符串的比较" class="headerlink" title="SDS和C字符串的比较"></a>SDS和C字符串的比较</h3><ul>
 <li>SDS取字符串的大小的时间复杂度是O(1)，而C语言字符串获取大小的时间复杂度是O(n)。原因是SDS的结构体中len属性保存的就是SDS保存的字符串长度。</li>
 <li>C语言字符串正因为没有保存自身的大小，有时候容易出现安全方面的问题。SDS的API对SDS进行修改时候，首先会检查SDS的空间是否足够，不够会将SDS的空间拓展到需要的大小。然后才进行实际上的修改，所以不会有缓冲区溢出的问题。</li>
 </ul>
-<p>###减少修改字符串时带来的内存重分配次数<br>我们在使用字符串的时候，最容易改变自身大小的方法就是<strong>增加(append)</strong>和<strong>截断(trim)</strong>了。</p>
+<h3 id="减少修改字符串时带来的内存重分配次数"><a href="#减少修改字符串时带来的内存重分配次数" class="headerlink" title="减少修改字符串时带来的内存重分配次数"></a>减少修改字符串时带来的内存重分配次数</h3><p>我们在使用字符串的时候，最容易改变自身大小的方法就是<strong>增加(append)</strong>和<strong>截断(trim)</strong>了。</p>
 <ul>
 <li>增加时，如果不通过内存重分配操作，很有可能发生缓冲区溢出的问题。</li>
 <li>截断时，如果不通过内存重分配操作，很有可能发生内存泄漏的问题。</li>
@@ -97,17 +95,16 @@
 <li>惰性空间释放：当SDS的API需要缩短SDS保存的字符串时，程序并不立即使用内存重分配来回收缩短后多出来的字节，而是使用free属性将这些字节的数量记录下来，并等待将来使用。(但Redis提供了相应的API，可以真正释放SDS的未使用空间，所以不用担心内存泄露的问题。)</li>
 </ol>
 </blockquote>
-<p>###二进制安全</p>
-<blockquote>
+<h3 id="二进制安全"><a href="#二进制安全" class="headerlink" title="二进制安全"></a>二进制安全</h3><blockquote>
 <p>C语言字符串必须符合某种编码(ASCII编码)，并且除了字符串的末尾之外，字符串里面不能包含空字符，否则空字符会被误认为是字符串的末尾。但是SDS可以，所以SDS还可以保存像图片、音频、视频、压缩文件这样的二进制数据。(buf为字节数组，通过这样的方式来实现)</p>
 </blockquote>
-<p>###兼容部分C字符串函数<br>虽然SDS的API都是二进制安全的，但它们一样遵循C字符串以空字符结尾的惯例。虽然这个字符不占大小，但是在分配的时候，SDS会默认分配len+1大小的空间。</p>
-<p>##SDS API<br><img src="./api.png" alt="Alt text"></p>
+<h3 id="兼容部分C字符串函数"><a href="#兼容部分C字符串函数" class="headerlink" title="兼容部分C字符串函数"></a>兼容部分C字符串函数</h3><p>虽然SDS的API都是二进制安全的，但它们一样遵循C字符串以空字符结尾的惯例。虽然这个字符不占大小，但是在分配的时候，SDS会默认分配len+1大小的空间。</p>
+<h2 id="SDS-API"><a href="#SDS-API" class="headerlink" title="SDS API"></a>SDS API</h2><p><img src="./api.png" alt="Alt text"></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/06/15/Redis设计与实现-动态字符串/" data-id="cipg7qvo40001ylx4eqww76vj" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/06/15/Redis设计与实现-动态字符串/" data-id="cipg7sk1m000100x4cxyecsx8" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis-NoSQL-DataBase/">Redis NoSQL DataBase</a></li></ul>
@@ -149,7 +146,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/06/13/hello-world/" data-id="cipg7qvo00000ylx4gk4ul48r" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/06/13/hello-world/" data-id="cipg7sk1i000000x4uyl09kyo" class="article-share-link">Share</a>
       
       
     </footer>

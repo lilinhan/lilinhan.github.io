@@ -113,17 +113,16 @@
 <ol>
 <li>为ht[1]分配空间，让字典同时持有ht[0]和ht[1]两个哈希表</li>
 <li>在字典中维持一个索引计数器rehashidx，并且设置为0，表示rehash的工作正式开始。</li>
-<li>在rehash的期间，每次对字典的增删改以Redis采取的是渐进式rehash。下面是rehash的详细步骤：</li>
-<li>为ht[1]分配空间，让字典同时持有ht[0]和ht[1]两个哈希表</li>
-<li>在字典中维持一个索引计数器rehashidx，并且设置为0，表示rehash的工作正式开始。</li>
-<li>在rehash的期间，每次对字典的增删æC<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
+<li>在rehash的期间，每次对字典的增删改查，程序除了会执行这些操作外，还会顺带将ht[0]哈希表在rehashidx索引上的所有键值对rehash至ht[1]上面。当rehash工作完成后，将rehashidx值加1.</li>
+<li>随着时间进行，ht[0]上面的键值对都被迁移到了ht[1]，这时候将rehashidx的值设为-1，表示rehash操作已完成。</li>
 </ol>
+<p>因为是将ht[0]的数据迁移到ht[1]上面，所以删改查操作会先在ht[0]上面进行，当没有找到时，才会在ht[1]上进行。新添加的键值对会直接保存到ht[1]上，所以ht[1]会只增不减。渐进式rehash的好处在于它将大任务分成小任务去执行。避免了大量的计算。</p>
+<p>##字典API<br><img src="./屏幕快照 2016-05-31 下午8.52.29.png" alt="api"></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/06/16/Redis设计与实现-字典/" data-id="ciphmdtep0003c2x40l4hva79" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/06/16/Redis设计与实现-字典/" data-id="ciphmgqjw0001dqx4rv9uiwwc" class="article-share-link">Share</a>
       
       
     </footer>
@@ -173,7 +172,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/06/15/Redis设计与实现-链表/" data-id="ciphmdtel0001c2x4xlhc4d9y" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/06/15/Redis设计与实现-链表/" data-id="ciphmgqk00003dqx4m0ooz3nv" class="article-share-link">Share</a>
       
       
     </footer>
@@ -233,7 +232,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/06/15/Redis设计与实现-动态字符串/" data-id="ciphmdteh0000c2x4l5hy3ruk" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/06/15/Redis设计与实现-动态字符串/" data-id="ciphmgqjr0000dqx4miwl8rts" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis-NoSQL-DataBase/">Redis NoSQL DataBase</a></li></ul>
@@ -275,7 +274,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/06/13/hello-world/" data-id="ciphmdter0004c2x4l0fxp739" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/06/13/hello-world/" data-id="ciphmgqk10004dqx42tsgag0t" class="article-share-link">Share</a>
       
       
     </footer>

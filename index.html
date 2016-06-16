@@ -72,7 +72,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>@(学习笔记)[数据库, NoSQL, 数据结构]</p>
-<p>#【Redis设计与实现】第四章 字典<br>[TOC]</p>
+<p>#【Redis设计与实现】第四章 字典</p>
 <blockquote>
 <p>字典，又称为符号表(symbol table)、关联数组(associative array)或映射(map)，是一种用于保存键值对(key-value pair)的抽象数据结构。除了用来表示数据库之外，字典还是哈希键的底层实现之一，当一个哈希键包含的键值对比较多，又或者键值对中的元素都是比较长的字符串时，Redis就会使用字典作为哈希键的底层实现。</p>
 </blockquote>
@@ -117,12 +117,12 @@
 <li>随着时间进行，ht[0]上面的键值对都被迁移到了ht[1]，这时候将rehashidx的值设为-1，表示rehash操作已完成。</li>
 </ol>
 <p>因为是将ht[0]的数据迁移到ht[1]上面，所以删改查操作会先在ht[0]上面进行，当没有找到时，才会在ht[1]上进行。新添加的键值对会直接保存到ht[1]上，所以ht[1]会只增不减。渐进式rehash的好处在于它将大任务分成小任务去执行。避免了大量的计算。</p>
-<p>##字典API<br><img src="./屏幕快照 2016-05-31 下午8.52.29.png" alt="api"></p>
+<h2 id="字典API"><a href="#字典API" class="headerlink" title="字典API"></a>字典API</h2><p><a href="http://redisbook.com/preview/dict/api.html" target="_blank" rel="external">字典 api</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/06/16/Redis设计与实现-字典/" data-id="ciphmgqjw0001dqx4rv9uiwwc" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/06/16/Redis设计与实现-字典/" data-id="ciphmkj050001fax40zg33b4c" class="article-share-link">Share</a>
       
       
     </footer>
@@ -172,7 +172,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/06/15/Redis设计与实现-链表/" data-id="ciphmgqk00003dqx4m0ooz3nv" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/06/15/Redis设计与实现-链表/" data-id="ciphmkj090003fax47el2s256" class="article-share-link">Share</a>
       
       
     </footer>
@@ -232,7 +232,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/06/15/Redis设计与实现-动态字符串/" data-id="ciphmgqjr0000dqx4miwl8rts" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/06/15/Redis设计与实现-动态字符串/" data-id="ciphmkj000000fax4nh6tb04e" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis-NoSQL-DataBase/">Redis NoSQL DataBase</a></li></ul>
@@ -274,7 +274,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/06/13/hello-world/" data-id="ciphmgqk10004dqx42tsgag0t" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/06/13/hello-world/" data-id="ciphmkj0b0004fax4zaajkaiq" class="article-share-link">Share</a>
       
       
     </footer>
